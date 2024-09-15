@@ -1,9 +1,9 @@
-import kivy
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
-
+from kivy.uix.image import Image
+from kivy.uix.floatlayout import FloatLayout
 
 class TriquiGame(GridLayout):
     def __init__(self, **kwargs):
@@ -12,21 +12,27 @@ class TriquiGame(GridLayout):
         self.turn = 'X'
         self.board = [['' for _ in range(3)] for _ in range(3)]
 
-        # Crear botones para el tablero
+        # Crear botones para el tablero con traslucidez
         for i in range(3):
             for j in range(3):
-                button = Button(font_size=32)
+                button = Button(
+                    font_size=50,
+                    font_name="Bobaland.ttf",
+                    background_color=(1, 1, 1, 0.5),  # Botones translúcidos (50% de opacidad)
+                    color=(0, 0, 0, 1)  # Color del texto de los botones (negro)
+                )
                 button.bind(on_press=self.on_button_press)
                 button.coord = (i, j)  # Coordenas para identificar el botón
                 self.add_widget(button)
 
-        # Modificando el Label con tipografía personalizada
+        # Modificando el Label con color de texto personalizado
         self.info_label = Label(
             text="Turno de: X",
-            font_size=40,            # Tamaño del texto
+            font_size=40,
             font_name="Bobaland.ttf",  # Ruta a la tipografía personalizada
-            size_hint=(1, 0.5),      # Controla el tamaño relativo del Label
-            height=50                # Altura específica del Label
+            size_hint=(1, 0.5),
+            height=50,
+            color=(0.5, 0.5, 1, 1)  # Color azul pastel para el texto del Label
         )
         self.add_widget(self.info_label)
 
@@ -81,7 +87,20 @@ class TriquiGame(GridLayout):
 
 class TriquiApp(App):
     def build(self):
-        return TriquiGame()
+        # Crear el layout principal con un fondo
+        root = FloatLayout()
+
+        # Agregar una imagen de fondo
+        background = Image(source='fondo4.jpg', allow_stretch=True, keep_ratio=False)
+        root.add_widget(background)
+
+        # Agregar el layout del juego sobre el fondo
+        game_layout = TriquiGame()
+        root.add_widget(game_layout)
+
+        return root
+
 
 if __name__ == "__main__":
     TriquiApp().run()
+
